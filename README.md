@@ -14,3 +14,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+# orangeTheory2025
+OTFKSA is your trusted platform for everything related to fitness, wellness, and gym management in Saudi Arabia. The app helps users explore gyms, book sessions, manage memberships, track progress, and stay committed to their fitness journey — all in one place.
