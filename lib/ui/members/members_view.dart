@@ -4,6 +4,7 @@ import 'package:otfksa2/models/member_model.dart';
 import 'package:otfksa2/ui/members/members_viewmodel.dart';
 import 'package:otfksa2/ui/widgtes/helper_widget.dart';
 import 'package:otfksa2/utils/app_colors.dart';
+import 'package:otfksa2/utils/theme_provider.dart';
 import 'package:provider/provider.dart';
 // import 'package:your_app/models/member_model.dart';
 // import 'members_viewmodel.dart';
@@ -15,11 +16,11 @@ class MembersView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<MembersViewModel>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F9),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leadingWidth: 150,
         leading: Padding(
@@ -30,8 +31,15 @@ class MembersView extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            // ✨ UPDATE: Changed icon color to black87 for better contrast
-            icon: const Icon(Iconsax.menu_1, color: Colors.black87),
+            icon: Icon(
+              themeProvider.isDarkMode ? Iconsax.sun_1 : Iconsax.moon,
+            ),
+            onPressed: () {
+              themeProvider.toggleTheme(!themeProvider.isDarkMode);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Iconsax.menu_1),
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },

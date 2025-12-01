@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:otfksa2/ui/setting/setting_view_model.dart'; // تأكد من المسار
+import 'package:otfksa2/utils/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:octo_image/octo_image.dart';
 
@@ -13,12 +14,12 @@ class SettingView extends StatelessWidget {
   Widget build(BuildContext context) {
     // ⭐️ نستخدم Provider.of مباشرة لأن ViewModel موفر في main.dart
     final viewModel = Provider.of<SettingsViewModel>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F9),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Settings'),
-        backgroundColor: Colors.white,
         elevation: 0.5,
       ),
       body: SingleChildScrollView(
@@ -32,14 +33,15 @@ class SettingView extends StatelessWidget {
 
             // قسم عام
             _buildSettingsSection(
+              context,
               title: 'General',
               children: [
                 _SettingSwitchTile(
                   title: 'Dark Mode',
                   subtitle: 'Enable dark theme across the application.',
                   icon: Iconsax.sun_1,
-                  value: viewModel.isDarkModeEnabled,
-                  onChanged: viewModel.toggleDarkMode,
+                  value: themeProvider.isDarkMode,
+                  onChanged: (value) => themeProvider.toggleTheme(value),
                   primaryColor: _primaryColor,
                 ),
                 _SettingSwitchTile(
@@ -57,6 +59,7 @@ class SettingView extends StatelessWidget {
 
             // قسم الحساب
             _buildSettingsSection(
+              context,
               title: 'Account',
               children: [
                 _SettingTapTile(
@@ -108,7 +111,11 @@ class SettingView extends StatelessWidget {
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: Colors.grey.shade200),
+            side: BorderSide(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.grey.shade800
+                  : Colors.grey.shade200,
+            ),
           ),
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -193,7 +200,11 @@ class SettingView extends StatelessWidget {
                       SizedBox(height: 4),
                       Text(
                         'admin@orangetheory.com',
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(
+                          color: Theme.of(context).brightness == Brightness.dark
+                              ? Colors.grey.shade400
+                              : Colors.grey,
+                        ),
                         overflow: TextOverflow.ellipsis, // ✅ الحل الثاني
                       ),
                     ],
@@ -207,7 +218,8 @@ class SettingView extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingsSection({
+  Widget _buildSettingsSection(
+    BuildContext context, {
     required String title,
     required List<Widget> children,
   }) {
@@ -229,7 +241,11 @@ class SettingView extends StatelessWidget {
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
-            side: BorderSide(color: Colors.grey.shade200),
+            side: BorderSide(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? Colors.grey.shade800
+                  : Colors.grey.shade200,
+            ),
           ),
           child: Column(children: children),
         ),
@@ -258,9 +274,15 @@ class _SettingSwitchTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return SwitchListTile(
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-      subtitle: Text(subtitle, style: TextStyle(color: Colors.grey.shade600)),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(
+          color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+        ),
+      ),
       secondary: Icon(icon, color: primaryColor),
       value: value,
       onChanged: onChanged,
@@ -287,11 +309,20 @@ class _SettingTapTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
     return ListTile(
       title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-      subtitle: Text(subtitle, style: TextStyle(color: Colors.grey.shade600)),
+      subtitle: Text(
+        subtitle,
+        style: TextStyle(
+          color: isDark ? Colors.grey.shade400 : Colors.grey.shade600,
+        ),
+      ),
       leading: Icon(icon, color: primaryColor),
-      trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+      trailing: Icon(
+        Icons.chevron_right,
+        color: isDark ? Colors.grey.shade400 : Colors.grey,
+      ),
       onTap: onTap,
     );
   }

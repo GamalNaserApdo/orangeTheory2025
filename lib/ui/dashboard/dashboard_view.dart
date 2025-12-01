@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:otfksa2/ui/dashboard/dashboard_viewmodel.dart';
 import 'package:otfksa2/ui/widgtes/helper_widget.dart';
+import 'package:otfksa2/utils/theme_provider.dart';
 import 'package:provider/provider.dart';
 // import 'dashboard_viewmodel.dart'; // اعمل import للملف اللي فوق
 // import 'dashboard_navigator.dart'; // اعمل import للملف اللي هيجي
@@ -13,11 +14,11 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<DashboardViewModel>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F9), // لون خلفية قريب من التصميم
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leadingWidth: 150, 
         leading: Padding(
@@ -28,7 +29,15 @@ class DashboardView extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Iconsax.menu_1, color: Colors.black),
+            icon: Icon(
+              themeProvider.isDarkMode ? Iconsax.sun_1 : Iconsax.moon,
+            ),
+            onPressed: () {
+              themeProvider.toggleTheme(!themeProvider.isDarkMode);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Iconsax.menu_1),
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },

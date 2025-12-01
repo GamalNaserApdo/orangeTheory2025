@@ -3,6 +3,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:otfksa2/models/subscription_plan_model.dart';
 import 'package:otfksa2/ui/subscription/subscriptions_viewmodel.dart';
 import 'package:otfksa2/utils/app_colors.dart';
+import 'package:otfksa2/utils/theme_provider.dart';
 import 'package:provider/provider.dart';
 // import 'package:your_app/models/subscription_plan_model.dart';
 // import 'subscriptions_viewmodel.dart';
@@ -16,11 +17,11 @@ class SubscriptionsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<SubscriptionsViewModel>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F9),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leadingWidth: 150,
         leading: Padding(
@@ -29,7 +30,15 @@ class SubscriptionsView extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Iconsax.menu_1, color: Colors.black),
+            icon: Icon(
+              themeProvider.isDarkMode ? Iconsax.sun_1 : Iconsax.moon,
+            ),
+            onPressed: () {
+              themeProvider.toggleTheme(!themeProvider.isDarkMode);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Iconsax.menu_1),
             onPressed: () {
               // ----- (التعديل هنا) -----
               // الكود ده بيدور على أقرب Scaffold (اللي هو في MainTabView)

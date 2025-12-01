@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:otfksa2/utils/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 class SettingsViewModel extends ChangeNotifier {
   static const Color primaryColor = Color(0xFFF37B2D);
@@ -7,10 +9,7 @@ class SettingsViewModel extends ChangeNotifier {
   String _profileImageUrl = 'https://i.pravatar.cc/150?img=5'; // صورة محاكاة
   String get profileImageUrl => _profileImageUrl;
 
-  // ⭐️ المتغيرات الناقصة: الوضع الداكن والتنبيهات
-  bool _isDarkModeEnabled = false;
-  bool get isDarkModeEnabled => _isDarkModeEnabled;
-
+  // ⭐️ المتغيرات الناقصة: التنبيهات
   bool _notificationsEnabled = true;
   bool get notificationsEnabled => _notificationsEnabled;
 
@@ -22,14 +21,6 @@ class SettingsViewModel extends ChangeNotifier {
     _profileImageUrl =
         'https://i.pravatar.cc/150?img=${DateTime.now().millisecond % 50}';
     print('Profile image updated.');
-    notifyListeners();
-  }
-
-  // ⭐️ الدوال الناقصة: تبديل الوضع الداكن
-  void toggleDarkMode(bool value) {
-    _isDarkModeEnabled = value;
-    // هنا ممكن تضيف لوجيك لتطبيق الثيم على MaterialApp
-    print('Dark Mode Toggled: $value');
     notifyListeners();
   }
 

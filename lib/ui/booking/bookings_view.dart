@@ -3,6 +3,7 @@ import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:otfksa2/models/booking_model.dart';
 import 'package:otfksa2/ui/booking/bookings_viewmodel.dart';
 import 'package:otfksa2/utils/app_colors.dart';
+import 'package:otfksa2/utils/theme_provider.dart';
 import 'package:provider/provider.dart';
 // import 'package:your_app/models/booking_model.dart';
 // import 'bookings_viewmodel.dart';
@@ -16,11 +17,11 @@ class BookingsView extends StatelessWidget {
 
     
     final viewModel = Provider.of<BookingsViewModel>(context);
+    final themeProvider = Provider.of<ThemeProvider>(context);
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F9),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leadingWidth: 150,
         leading: Padding(
@@ -29,7 +30,15 @@ class BookingsView extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Iconsax.menu_1, color: Colors.black),
+            icon: Icon(
+              themeProvider.isDarkMode ? Iconsax.sun_1 : Iconsax.moon,
+            ),
+            onPressed: () {
+              themeProvider.toggleTheme(!themeProvider.isDarkMode);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Iconsax.menu_1),
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },
