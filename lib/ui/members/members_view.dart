@@ -30,7 +30,8 @@ class MembersView extends StatelessWidget {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Iconsax.menu_1, color: Colors.red),
+            // ✨ UPDATE: Changed icon color to black87 for better contrast
+            icon: const Icon(Iconsax.menu_1, color: Colors.black87),
             onPressed: () {
               Scaffold.of(context).openDrawer();
             },
@@ -38,21 +39,23 @@ class MembersView extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        // ✨ UPDATE: Increased padding from 16.0 to 20.0
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
         child: Column(
           children: [
+            const SizedBox(height: 24), // ✨ UPDATE: Added top space
             _buildHeader(context, viewModel),
-            const SizedBox(height: 16),
+            const SizedBox(height: 24), // ✨ UPDATE: Increased spacing
             buildSearchBar(viewModel),
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
             viewModel.isLoading
                 ? const Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primaryColor,
-                      ),
-                    ),
-                  )
+              child: Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.primaryColor,
+                ),
+              ),
+            )
                 : buildMembersList(viewModel),
           ],
         ),
@@ -63,30 +66,47 @@ class MembersView extends StatelessWidget {
   Widget _buildHeader(BuildContext context, MembersViewModel viewModel) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center, // ✨ UPDATE: Center alignment
       children: [
-        const Column(
+        Column( // removed const to allow dynamic styles
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
+            const Text(
               'Members',
-              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              // ✨ UPDATE: Bigger font, bolder weight, dark color
+              style: TextStyle(fontSize: 32, fontWeight: FontWeight.w800, color: Color(0xFF1A1A1A)),
             ),
-            SizedBox(height: 4),
+            const SizedBox(height: 6), // ✨ UPDATE: adjusted spacing
             Text(
               'Manage gym members',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              // ✨ UPDATE: adjusted grey shade
+              style: TextStyle(fontSize: 15, color: Colors.grey[600], fontWeight: FontWeight.w500),
             ),
           ],
         ),
-        ElevatedButton(
-          onPressed: () => viewModel.onAddMemberPressed(context),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primaryColor,
-            shape: const CircleBorder(),
-            padding: const EdgeInsets.all(12),
+
+        // ✨ UPDATE: Added Container for Shadow effect
+        Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primaryColor.withOpacity(0.3),
+                blurRadius: 10,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
-          child: const Icon(Iconsax.user_add, color: Colors.white),
+          child: ElevatedButton(
+            onPressed: () => viewModel.onAddMemberPressed(context),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.primaryColor,
+              shape: const CircleBorder(),
+              padding: const EdgeInsets.all(14), // ✨ UPDATE: Slightly larger
+              elevation: 0, // Elevation handled by Container
+            ),
+            child: const Icon(Iconsax.user_add, color: Colors.white, size: 22),
+          ),
         ),
       ],
     );
