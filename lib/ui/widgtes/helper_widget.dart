@@ -84,7 +84,6 @@ class _StatCard extends StatelessWidget {
 
 Widget buildRecentActivity(DashboardViewModel viewModel) {
   return _ChartContainer(
-    // استخدام نفس الكارت
     title: 'Recent Activity',
     child: ListView.separated(
       shrinkWrap: true,
@@ -125,7 +124,7 @@ Widget buildWeeklyBookings(BuildContext context, DashboardViewModel viewModel) {
           topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(showTitles: false),
-          ), // يمكنك إضافة أيام الأسبوع هنا
+          ),
           rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
         ),
         borderData: FlBorderData(show: false),
@@ -133,20 +132,20 @@ Widget buildWeeklyBookings(BuildContext context, DashboardViewModel viewModel) {
             .asMap()
             .map(
               (index, value) => MapEntry(
-                index,
-                BarChartGroupData(
-                  x: index,
-                  barRods: [
-                    BarChartRodData(
-                      toY: value,
-                      color: AppColors.primaryColor,
-                      width: 20,
-                      borderRadius: const BorderRadius.all(Radius.circular(4)),
-                    ),
-                  ],
+            index,
+            BarChartGroupData(
+              x: index,
+              barRods: [
+                BarChartRodData(
+                  toY: value,
+                  color: AppColors.primaryColor,
+                  width: 20,
+                  borderRadius: const BorderRadius.all(Radius.circular(4)),
                 ),
-              ),
-            )
+              ],
+            ),
+          ),
+        )
             .values
             .toList(),
       ),
@@ -213,9 +212,9 @@ Widget buildStatsGrid(DashboardViewModel viewModel) {
 }
 
 Widget buildRevenueOverview(
-  BuildContext context,
-  DashboardViewModel viewModel,
-) {
+    BuildContext context,
+    DashboardViewModel viewModel,
+    ) {
   return _ChartContainer(
     title: 'Revenue Overview',
     child: LineChart(
@@ -248,17 +247,26 @@ Widget buildRevenueOverview(
 }
 
 Widget buildSearchBar(MembersViewModel viewModel) {
-  return Card(
-    elevation: 0,
-    color: Colors.white,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  return Container(
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(16),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black.withOpacity(0.05),
+          blurRadius: 10,
+          offset: const Offset(0, 4),
+        ),
+      ],
+    ),
     child: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 2.0),
       child: TextField(
         controller: viewModel.searchController,
-        decoration: const InputDecoration(
-          icon: Icon(Iconsax.search_normal_1, color: Colors.grey),
+        decoration: InputDecoration(
+          icon: Icon(Iconsax.search_normal_1, color: Colors.grey[400]),
           hintText: 'Search members...',
+          hintStyle: TextStyle(color: Colors.grey[400]),
           border: InputBorder.none,
         ),
       ),
@@ -273,6 +281,7 @@ Widget buildMembersList(MembersViewModel viewModel) {
 
   return Expanded(
     child: ListView.builder(
+      padding: const EdgeInsets.only(bottom: 20, top: 5),
       itemCount: viewModel.filteredMembers.length,
       itemBuilder: (context, index) {
         final member = viewModel.filteredMembers[index];
@@ -296,13 +305,21 @@ class _MemberCard extends StatelessWidget {
     final bool isActive = member.status == MemberStatus.Active;
     final bool isPremium = member.plan == MembershipPlan.Premium;
 
-    return Card(
-      elevation: 0,
-      color: Colors.white,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      margin: const EdgeInsets.only(bottom: 12),
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 15,
+            offset: const Offset(0, 5),
+          ),
+        ],
+      ),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -313,36 +330,50 @@ class _MemberCard extends StatelessWidget {
                   member.name,
                   style: const TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFF2D2D2D),
                   ),
                 ),
                 _StatusChip(isActive: isActive),
               ],
             ),
-            Text(member.email, style: const TextStyle(color: Colors.grey)),
-            const SizedBox(height: 12),
+            const SizedBox(height: 4),
+            Text(member.email, style: TextStyle(color: Colors.grey[500], fontSize: 14)),
+            const SizedBox(height: 16),
             Row(
               children: [
-                Text(member.phone, style: const TextStyle(fontSize: 14)),
-                const SizedBox(width: 12),
+                Icon(Iconsax.call, size: 16, color: Colors.grey[400]),
+                const SizedBox(width: 8),
+                Text(member.phone, style: TextStyle(fontSize: 14, color: Colors.grey[700])),
+                const Spacer(),
                 _PlanChip(isPremium: isPremium),
               ],
             ),
-            const SizedBox(height: 12),
-            const Divider(height: 1),
+            const SizedBox(height: 16),
+            const Divider(height: 1, color: Color(0xFFEEEEEE)),
             const SizedBox(height: 12),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Joined: ${member.joinedDate.toLocal().toString().split(' ')[0]}',
-                  style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  style: TextStyle(color: Colors.grey[400], fontSize: 12),
                 ),
-                TextButton(
-                  onPressed: onViewPressed,
-                  child: const Text(
-                    'View',
-                    style: TextStyle(color: MembersViewModel.primaryColor),
+                InkWell(
+                  onTap: onViewPressed,
+                  child: const Row(
+                    children: [
+                      Text(
+                        'View Details',
+                        style: TextStyle(
+                            color: MembersViewModel.primaryColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13
+                        ),
+                      ),
+                      SizedBox(width: 4),
+                      Icon(Iconsax.arrow_right_3, size: 16, color: MembersViewModel.primaryColor)
+                    ],
                   ),
                 ),
               ],
@@ -361,18 +392,28 @@ class _StatusChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: isActive ? Colors.green.shade100 : Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(20),
+        color: isActive ? const Color(0xFFE8F5E9) : const Color(0xFFF5F5F5),
+        borderRadius: BorderRadius.circular(30),
       ),
-      child: Text(
-        isActive ? 'Active' : 'Inactive',
-        style: TextStyle(
-          color: isActive ? Colors.green.shade800 : Colors.grey.shade700,
-          fontWeight: FontWeight.w600,
-          fontSize: 12,
-        ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          CircleAvatar(
+            radius: 3,
+            backgroundColor: isActive ? Colors.green : Colors.grey,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            isActive ? 'Active' : 'Inactive',
+            style: TextStyle(
+              color: isActive ? Colors.green[700] : Colors.grey[600],
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -385,25 +426,25 @@ class _PlanChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
         color: isPremium
-            ? MembersViewModel.primaryColor.withOpacity(0.1)
-            : Colors.grey.shade200,
-        borderRadius: BorderRadius.circular(8),
+            ? MembersViewModel.primaryColor.withOpacity(0.08)
+            : Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: isPremium
-              ? MembersViewModel.primaryColor
-              : Colors.grey.shade400,
+              ? MembersViewModel.primaryColor.withOpacity(0.2)
+              : Colors.transparent,
         ),
       ),
       child: Text(
-        isPremium ? 'Premium' : 'Basic',
+        isPremium ? 'Premium Plan' : 'Basic Plan',
         style: TextStyle(
           color: isPremium
               ? MembersViewModel.primaryColor
-              : Colors.grey.shade700,
-          fontWeight: FontWeight.w500,
+              : Colors.grey[600],
+          fontWeight: FontWeight.w600,
           fontSize: 12,
         ),
       ),
