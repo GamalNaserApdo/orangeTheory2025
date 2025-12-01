@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:otfksa2/ui/setting/setting_view_model.dart'; // تأكد من المسار
+import 'package:otfksa2/ui/setting/setting_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:octo_image/octo_image.dart';
 
@@ -11,14 +11,14 @@ class SettingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ⭐️ نستخدم Provider.of مباشرة لأن ViewModel موفر في main.dart
     final viewModel = Provider.of<SettingsViewModel>(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFF9F9F9),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('Settings'),
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         elevation: 0.5,
       ),
       body: SingleChildScrollView(
@@ -26,11 +26,8 @@ class SettingView extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ⭐️ قسم البروفايل
-            _buildProfileSection(context, viewModel),
+            _buildProfileSection(context, viewModel, isDark),
             const SizedBox(height: 24),
-
-            // قسم عام
             _buildSettingsSection(
               title: 'General',
               children: [
@@ -52,10 +49,7 @@ class SettingView extends StatelessWidget {
                 ),
               ],
             ),
-
             const SizedBox(height: 24),
-
-            // قسم الحساب
             _buildSettingsSection(
               title: 'Account',
               children: [
@@ -63,18 +57,14 @@ class SettingView extends StatelessWidget {
                   title: 'Change Password',
                   subtitle: 'Update your admin security password.',
                   icon: Iconsax.lock_1,
-                  onTap: () {
-                    // SettingsNavigator.goToChangePassword(context);
-                  },
+                  onTap: () {},
                   primaryColor: _primaryColor,
                 ),
                 _SettingTapTile(
                   title: 'Privacy Policy',
                   subtitle: 'Review application data handling policies.',
                   icon: Iconsax.security,
-                  onTap: () {
-                    // SettingsNavigator.goToPrivacyPolicy(context);
-                  },
+                  onTap: () {},
                   primaryColor: _primaryColor,
                 ),
               ],
@@ -85,16 +75,12 @@ class SettingView extends StatelessWidget {
     );
   }
 
-  // ⭐️ Widget جديد لقسم البروفايل
-  Widget _buildProfileSection(
-    BuildContext context,
-    SettingsViewModel viewModel,
-  ) {
+  Widget _buildProfileSection(BuildContext context, SettingsViewModel viewModel, bool isDark) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(left: 8.0, bottom: 8.0),
+        Padding(
+          padding: const EdgeInsets.only(left: 8.0, bottom: 8.0),
           child: Text(
             'Profile',
             style: TextStyle(
@@ -105,6 +91,7 @@ class SettingView extends StatelessWidget {
           ),
         ),
         Card(
+          color: isDark ? Colors.grey[900] : Colors.white,
           elevation: 0,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -114,7 +101,6 @@ class SettingView extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               children: [
-                // ⭐️ الصورة (لها حجم ثابت)
                 Container(
                   width: 80,
                   height: 80,
@@ -124,35 +110,6 @@ class SettingView extends StatelessWidget {
                   ),
                   child: Stack(
                     children: [
-                      // ClipOval(
-                      //   child: OctoImage(
-                      //     image: AssetImage(
-                      //       viewModel.profileImageUrl,
-                      //     ),
-                      //     fit: BoxFit.cover,
-                      //     progressIndicatorBuilder: (context, progress) =>
-                      //         const Center(
-                      //           child: CircularProgressIndicator(
-                      //             color: _primaryColor,
-                      //           ),
-                      //         ),
-                      //     errorBuilder: (context, error, stackTrace) =>
-                      //         const Icon(
-                      //           Iconsax.user_octagon,
-                      //           size: 40,
-                      //           color: Colors.grey,
-                      //         ),
-                      //     // ⭐️ الحل: نستخدم placeholderBuilder ونرجع Widget
-                      //     placeholderBuilder: (context) =>
-                      //         OctoPlaceholder.circleAvatar(
-                      //           backgroundColor: Colors.grey.shade200,
-                      //           text: Text(
-                      //             'OT',
-                      //             style: TextStyle(color: _primaryColor),
-                      //           ),
-                      //         )(context),
-                      //   ),
-                      // ),
                       Positioned(
                         bottom: 0,
                         right: 0,
@@ -175,9 +132,7 @@ class SettingView extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 const SizedBox(width: 16),
-
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -187,14 +142,15 @@ class SettingView extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
+                          color: isDark ? Colors.white : Colors.black,
                         ),
-                        overflow: TextOverflow.ellipsis, // ✅ الحل الأول
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 4),
                       Text(
                         'admin@orangetheory.com',
-                        style: TextStyle(color: Colors.grey),
-                        overflow: TextOverflow.ellipsis, // ✅ الحل الثاني
+                        style: TextStyle(color: isDark ? Colors.grey[400] : Colors.grey),
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -238,7 +194,6 @@ class SettingView extends StatelessWidget {
   }
 }
 
-// ⭐️ Widget لـ ListTile فيه زرار Switch
 class _SettingSwitchTile extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -269,7 +224,6 @@ class _SettingSwitchTile extends StatelessWidget {
   }
 }
 
-// ⭐️ Widget لـ ListTile يمكن الضغط عليه
 class _SettingTapTile extends StatelessWidget {
   final String title;
   final String subtitle;
@@ -287,11 +241,16 @@ class _SettingTapTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return ListTile(
-      title: Text(title, style: const TextStyle(fontWeight: FontWeight.w600)),
-      subtitle: Text(subtitle, style: TextStyle(color: Colors.grey.shade600)),
+      title: Text(
+        title,
+        style: TextStyle(fontWeight: FontWeight.w600, color: isDark ? Colors.white : Colors.black),
+      ),
+      subtitle: Text(subtitle, style: TextStyle(color: isDark ? Colors.grey[400] : Colors.grey.shade600)),
       leading: Icon(icon, color: primaryColor),
-      trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+      trailing: Icon(Icons.chevron_right, color: isDark ? Colors.white : Colors.grey),
       onTap: onTap,
     );
   }
