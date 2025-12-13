@@ -45,6 +45,8 @@ dependencies:
   provider: ^6.1.5+1
   octo_image: ^2.1.0
   fluttertoast: ^9.0.0
+  supabase: ^2.10.0
+  supabase_flutter: ^2.10.3
 dev_dependencies:
   flutter_test:
     sdk: flutter

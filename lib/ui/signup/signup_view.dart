@@ -1,29 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:otfksa2/ui/login/login_viewmodel.dart';
+import 'package:otfksa2/ui/signup/signup_viewmodel.dart';
 import 'package:otfksa2/utils/app_colors.dart';
-import 'package:otfksa2/utils/app_routes.dart';
 import 'package:provider/provider.dart';
 
-class LoginView extends StatelessWidget {
-  const LoginView({Key? key}) : super(key: key);
-
-  static const Color _infoColor = Color(0xFFFFF0E6);
-  static const Color _infoBorderColor = Color(0xFFFFD1B3);
+class SignupView extends StatelessWidget {
+  const SignupView({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => LoginViewModel(),
-      child: Consumer<LoginViewModel>(
+      create: (_) => SignupViewModel(),
+      child: Consumer<SignupViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
-            backgroundColor: const Color(0xFFF9F9F9), //
+            backgroundColor: const Color(0xFFF9F9F9),
             body: Center(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24.0),
                 child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 400), //
+                  constraints: const BoxConstraints(maxWidth: 400),
                   child: Card(
                     elevation: 0,
                     color: Colors.white,
@@ -41,9 +37,8 @@ class LoginView extends StatelessWidget {
                             height: 40,
                           ),
                           const SizedBox(height: 24),
-
                           const Text(
-                            'Admin Login',
+                            'Create Admin Account',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 22,
@@ -51,13 +46,14 @@ class LoginView extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 32),
-
+                          _buildNameField(viewModel),
+                          const SizedBox(height: 20),
                           _buildEmailField(viewModel),
                           const SizedBox(height: 20),
-
                           _buildPasswordField(viewModel),
+                          const SizedBox(height: 20),
+                          _buildConfirmPasswordField(viewModel),
                           const SizedBox(height: 24),
-
                           if (viewModel.errorMessage != null)
                             Padding(
                               padding: const EdgeInsets.only(bottom: 16.0),
@@ -67,12 +63,9 @@ class LoginView extends StatelessWidget {
                                 textAlign: TextAlign.center,
                               ),
                             ),
-
-                          _buildLoginButton(context, viewModel),
+                          _buildSignupButton(context, viewModel),
                           const SizedBox(height: 16),
-
-                          _buildSignupLink(context),
-                          const SizedBox(height: 24),
+                          _buildLoginLink(context),
                         ],
                       ),
                     ),
@@ -86,7 +79,42 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Widget _buildEmailField(LoginViewModel viewModel) {
+  Widget _buildNameField(SignupViewModel viewModel) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Full Name',
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          controller: viewModel.nameController,
+          keyboardType: TextInputType.name,
+          decoration: InputDecoration(
+            hintText: 'John Doe',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(
+                color: AppColors.primaryColor,
+                width: 2,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildEmailField(SignupViewModel viewModel) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -121,7 +149,7 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Widget _buildPasswordField(LoginViewModel viewModel) {
+  Widget _buildPasswordField(SignupViewModel viewModel) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -163,11 +191,55 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Widget _buildLoginButton(BuildContext context, LoginViewModel viewModel) {
+  Widget _buildConfirmPasswordField(SignupViewModel viewModel) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          'Confirm Password',
+          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+        ),
+        const SizedBox(height: 8),
+        TextField(
+          controller: viewModel.confirmPasswordController,
+          obscureText: viewModel.obscureConfirmPassword,
+          decoration: InputDecoration(
+            hintText: 'confirm password',
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(
+                color: AppColors.primaryColor,
+                width: 2,
+              ),
+            ),
+            suffixIcon: IconButton(
+              icon: Icon(
+                viewModel.obscureConfirmPassword
+                    ? Iconsax.eye_slash
+                    : Iconsax.eye,
+                color: Colors.grey,
+              ),
+              onPressed: viewModel.toggleConfirmPasswordVisibility,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSignupButton(BuildContext context, SignupViewModel viewModel) {
     return ElevatedButton(
       onPressed: viewModel.isLoading
-          ? null // تعطيل الزر أثناء التحميل
-          : () => viewModel.onLoginPressed(context),
+          ? null
+          : () => viewModel.onSignupPressed(context),
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primaryColor,
         foregroundColor: Colors.white,
@@ -177,7 +249,6 @@ class LoginView extends StatelessWidget {
       ),
       child: viewModel.isLoading
           ? const SizedBox(
-              // إظهار علامة تحميل
               height: 20,
               width: 20,
               child: CircularProgressIndicator(
@@ -186,25 +257,24 @@ class LoginView extends StatelessWidget {
               ),
             )
           : const Text(
-              'Login',
+              'Sign Up',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
     );
   }
 
-  Widget _buildSignupLink(BuildContext context) {
+  Widget _buildLoginLink(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text(
-          "Don't have an account? ",
+          'Already have an account? ',
           style: TextStyle(color: Colors.grey),
         ),
         TextButton(
-          onPressed: () =>
-              Navigator.pushNamed(context, AppRoutes.signupRouteName),
+          onPressed: () => Navigator.pop(context),
           child: const Text(
-            'Sign Up',
+            'Login',
             style: TextStyle(
               color: AppColors.primaryColor,
               fontWeight: FontWeight.bold,

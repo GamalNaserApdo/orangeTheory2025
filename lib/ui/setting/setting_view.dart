@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:otfksa2/ui/setting/setting_view_model.dart'; // تأكد من المسار
+import 'package:otfksa2/ui/setting/setting_view_model.dart';
 import 'package:provider/provider.dart';
-import 'package:octo_image/octo_image.dart';
 
 class SettingView extends StatelessWidget {
   const SettingView({Key? key}) : super(key: key);

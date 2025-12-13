@@ -238,7 +238,7 @@ Widget buildRevenueOverview(
             dotData: const FlDotData(show: true),
             belowBarData: BarAreaData(
               show: true,
-              color: AppColors.primaryColor.withOpacity(0.1),
+              color: AppColors.primaryColor.withValues(alpha: 0.1),
             ),
           ),
         ],
@@ -388,7 +388,7 @@ class _PlanChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
       decoration: BoxDecoration(
         color: isPremium
-            ? MembersViewModel.primaryColor.withOpacity(0.1)
+            ? MembersViewModel.primaryColor.withValues(alpha: 0.1)
             : Colors.grey.shade200,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(

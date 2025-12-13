@@ -173,7 +173,9 @@ class _DrawerItem extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
       decoration: BoxDecoration(
-        color: isSelected ? _primaryColor.withOpacity(0.1) : Colors.transparent,
+        color: isSelected
+            ? _primaryColor.withValues(alpha: 0.1)
+            : Colors.transparent,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
           color: isSelected ? _primaryColor : Colors.transparent,

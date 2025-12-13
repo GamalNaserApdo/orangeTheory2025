@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
-import 'package:otfksa2/models/member_model.dart';
 import 'package:otfksa2/ui/members/members_viewmodel.dart';
 import 'package:otfksa2/ui/widgtes/helper_widget.dart';
 import 'package:otfksa2/utils/app_colors.dart';
 import 'package:provider/provider.dart';
-// import 'package:your_app/models/member_model.dart';
-// import 'members_viewmodel.dart';
-// import 'members_navigator.dart';
 
 class MembersView extends StatelessWidget {
   const MembersView({Key? key}) : super(key: key);

@@ -8,7 +8,6 @@ class MemberDetailsDialog extends StatelessWidget {
   const MemberDetailsDialog({Key? key, required this.member}) : super(key: key);
 
   static const Color _primaryColor = Color(0xFFF37B2D);
-  static const Color _activeColor = Colors.green;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +17,7 @@ class MemberDetailsDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       contentPadding: EdgeInsets.zero,
       titlePadding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-      
+
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -32,7 +31,7 @@ class MemberDetailsDialog extends StatelessWidget {
           ),
         ],
       ),
-      
+
       content: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -46,7 +45,10 @@ class MemberDetailsDialog extends StatelessWidget {
                 children: [
                   Text(
                     member.name,
-                    style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                   _StatusChip(isActive: isActive),
                 ],
@@ -73,15 +75,19 @@ class MemberDetailsDialog extends StatelessWidget {
               _DetailRow(
                 icon: Iconsax.crown,
                 label: 'Plan',
-                value: member.plan == MembershipPlan.Premium ? 'Premium' : 'Basic',
-                color: member.plan == MembershipPlan.Premium ? _primaryColor : Colors.grey.shade700,
+                value: member.plan == MembershipPlan.Premium
+                    ? 'Premium'
+                    : 'Basic',
+                color: member.plan == MembershipPlan.Premium
+                    ? _primaryColor
+                    : Colors.grey.shade700,
               ),
               _DetailRow(
                 icon: Iconsax.calendar_add,
                 label: 'Joined Date',
                 value: member.joinedDate.toLocal().toString().split(' ')[0],
               ),
-              
+
               // 4. زر للإجراء (اختياري: مثلاً تحرير)
               const SizedBox(height: 30),
               SizedBox(
@@ -98,7 +104,9 @@ class MemberDetailsDialog extends StatelessWidget {
                     backgroundColor: _primaryColor,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
                   ),
                 ),
               ),
@@ -120,7 +128,12 @@ class _DetailRow extends StatelessWidget {
   final String value;
   final Color? color;
 
-  const _DetailRow({required this.icon, required this.label, required this.value, this.color});
+  const _DetailRow({
+    required this.icon,
+    required this.label,
+    required this.value,
+    this.color,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +174,7 @@ class _DetailRow extends StatelessWidget {
 class _StatusChip extends StatelessWidget {
   final bool isActive;
   const _StatusChip({required this.isActive});
-  
+
   // (نفس الكود الخاص بـ _StatusChip من ملف members_view.dart)
   @override
   Widget build(BuildContext context) {

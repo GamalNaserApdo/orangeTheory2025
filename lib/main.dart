@@ -10,44 +10,44 @@ import 'package:otfksa2/ui/drawer/studio_drawer/studio_view_model.dart';
 import 'package:otfksa2/ui/editing_plan/edit_plan_view.dart';
 import 'package:otfksa2/ui/members/members_viewmodel.dart';
 import 'package:otfksa2/ui/mian_tap_view/main_tab_view.dart';
-// import 'package:otfksa2/ui/mian_tap_view/main_tab_view.dart'; // <-- مبقاش هو البداية
 import 'package:otfksa2/ui/mian_tap_view/main_tab_viewmodel.dart'
     show MainTabViewModel;
 import 'package:otfksa2/ui/setting/setting_view.dart';
 import 'package:otfksa2/ui/setting/setting_view_model.dart';
+import 'package:otfksa2/ui/signup/signup_view.dart';
 import 'package:otfksa2/ui/subscription/subscriptions_viewmodel.dart';
 import 'package:otfksa2/utils/app_routes.dart';
-
-// 1. --- (التعديل الأول) ---
-// اعمل import لصفحة اللوجن
 import 'package:otfksa2/ui/login/login_view.dart';
-import 'package:provider/provider.dart'; // (أو المسار الصحيح بتاعها)
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url:
+        'https://pvdnhioqqdhpbwlgzjyc.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB2ZG5oaW9xcWRocGJ3bGd6anljIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2MTUxOTQsImV4cCI6MjA4MDE5MTE5NH0.uB8BGFhrJigxSNKNBTY_8ZoxGc8O9B_PB67f61cCDbM', // انسخ المفتاح من إعدادات Supabase
+  );
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // تعريف اللون الأساسي
   static const Color _primaryColor = Color(0xFFF37B2D);
 
   @override
   Widget build(BuildContext context) {
-    // 4. استخدام MultiProvider لتوفير كل الـ ViewModels
     return MultiProvider(
       providers: [
-        // الـ ViewModel الخاص بالـ Tabs
         ChangeNotifierProvider(create: (_) => MainTabViewModel()),
 
-        // الـ ViewModels الخاصة بشاشات الـ BottomNavBar
         ChangeNotifierProvider(create: (_) => DashboardViewModel()),
         ChangeNotifierProvider(create: (_) => MembersViewModel()),
         ChangeNotifierProvider(create: (_) => BookingsViewModel()),
         ChangeNotifierProvider(create: (_) => SubscriptionsViewModel()),
 
-        // ⭐️ الـ ViewModels الجديدة (Settings + Business)
         ChangeNotifierProvider(create: (_) => SettingsViewModel()),
         ChangeNotifierProvider(create: (_) => PackagesViewModel()),
         ChangeNotifierProvider(create: (_) => StudiosViewModel()),
@@ -72,9 +72,9 @@ class MyApp extends StatelessWidget {
 
         routes: {
           AppRoutes.loginRouteName: (context) => const LoginView(),
+          AppRoutes.signupRouteName: (context) => const SignupView(),
           AppRoutes.dashboardRouteName: (context) => MainTabView(),
           AppRoutes.editPlanRouteName: (context) => EditPlanView(),
-          // ⭐️ إضافة المسارات الجديدة
           AppRoutes.packagesRouteName: (context) => const PackagesView(),
           AppRoutes.studiosRouteName: (context) => const StudiosView(),
           AppRoutes.countriesCitiesRouteName: (context) =>
