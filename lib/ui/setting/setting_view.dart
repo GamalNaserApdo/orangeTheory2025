@@ -4,6 +4,7 @@ import 'package:otfksa2/ui/setting/setting_view_model.dart'; // تأكد من ا
 import 'package:otfksa2/utils/theme_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:octo_image/octo_image.dart';
+import 'package:otfksa2/ui/setting/privacy_policy_view.dart'; 
 
 class SettingView extends StatelessWidget {
   const SettingView({Key? key}) : super(key: key);
@@ -77,7 +78,12 @@ class SettingView extends StatelessWidget {
                   icon: Iconsax.security,
                   onTap: () {
                     // SettingsNavigator.goToPrivacyPolicy(context);
-                  },
+                    Navigator.of(context).push(
+                    MaterialPageRoute(
+                    builder: (context) => const PrivacyPolicyView(),
+                    ),
+                    );
+                    },
                   primaryColor: _primaryColor,
                 ),
               ],
